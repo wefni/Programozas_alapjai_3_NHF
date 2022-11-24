@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 public class Word extends JLabel{
         private Thread t;
@@ -45,7 +44,4 @@ public class Word extends JLabel{
             freeze = true;
     }
 
-    public void setFreeze(){
-            freeze = true;
-    }
 }

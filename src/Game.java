@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.Timer;
@@ -13,6 +12,7 @@ public class Game extends JFrame {
 
     private JLabel mW;
     private JLabel WordPerMin;
+    JLabel e;
     private Words szavak;
     private ArrayList<Word> list;
 
@@ -28,18 +28,20 @@ public class Game extends JFrame {
         f.getContentPane();
         p.setLayout(null);
 
+
+
         tf.setSize(new Dimension(150,20));
         tf.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
         tf.setBackground(Color.WHITE);
         tf.setFont(new Font("Arial",Font.BOLD,12));
         tf.setForeground(Color.BLACK);
-        tf.setLocation(0,340);
+        tf.setLocation(0,341);
         tf.setVisible(true);
 
         mW = new JLabel("Missed Words: "+missedWords);
         mW.setSize(new Dimension(150,15));
         mW.setLocation(200,345);
-        mW.setForeground(new Color(136, 137, 138));
+        mW.setForeground(Color.BLACK);
         mW.setFont(new Font("Arial",Font.BOLD,15));
 
         WordPerMin = new JLabel("WordsPerMinute: " + wpm);
@@ -49,9 +51,17 @@ public class Game extends JFrame {
         WordPerMin.setFont(new Font("Arial",Font.BOLD,15));
         wpm = 0;
 
+        e = new JLabel("");
+        e.setVisible(false);
+        e.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
+        e.setSize(new Dimension(300,125));
+        e.setBackground(Color.WHITE);
+        e.setLocation(125,100);
+
+
         JLabel csik = new JLabel("");
         csik.setSize(new Dimension(600,20));
-        csik.setLocation(0,340);
+        csik.setLocation(0,342);
         csik.setBackground(Color.WHITE);
         csik.setOpaque(true);
 
@@ -59,7 +69,7 @@ public class Game extends JFrame {
 
         p.setBackground(new Color(137, 207, 240));
 
-
+        p.add(e);
         p.add(tf);
         p.add(mW);
         p.add(WordPerMin);
@@ -71,6 +81,7 @@ public class Game extends JFrame {
         f.setResizable(false);
         f.setTitle("Nyomod");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public void Jatek(){
@@ -115,20 +126,35 @@ public class Game extends JFrame {
                 if(missedWords==5){
 
                     for (int k = 0; k < list.size(); k++) {
-                        list.get(k).setFreeze();
+                        list.get(k).destroy();
                     }
                     double s = ((double)i/10)/60.00;
                     wpm = (double)(d/5)/ s;
 
                     WordPerMin.setText("WordsPerMinute: " +(int) wpm);
                     tf.setEnabled(false);
+                    tf.setText("");
                     t.cancel();
                     t.purge();
+                    System.out.println("xd1");
+                    vege();
                 }
                 System.out.println(i);
+
             }
         };
+        System.out.println("xd2");
         t.scheduleAtFixedRate(task,0,100);
+
+
+    }
+
+    public void vege(){
+
+        e.setOpaque(true);
+        e.setVisible(true);
+        System.out.println("xd3");
+
     }
 
     public void check(){
