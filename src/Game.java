@@ -196,12 +196,11 @@ public class Game extends JFrame {
                 FileWriter wr = new FileWriter("HoF.txt");
                 wr.write(tfEnd.getText() + " " + (int) wpm);
                 wr.close();
-                System.out.println("Sikeres fajlba iras nyomod bajnok");
-
+                f.dispose();
+                Menu menu = new Menu();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-
         });
 
     }
