@@ -9,7 +9,7 @@ public class Word extends JLabel{
             freeze = false;
             super.setText(word);
             super.setSize(new Dimension(150,50));
-            super.setForeground(new Color(77, 163, 55));
+            super.setForeground(new Color(35, 110, 25));
         }
 
         public void go(){
@@ -23,7 +23,7 @@ public class Word extends JLabel{
                             super.setForeground(new Color(240, 233, 50));
                         }
                         else if(i>400){
-                            super.setForeground(new Color(217, 37, 37));
+                            super.setForeground(new Color(161, 22, 22));
                         }
 
                         if(freeze){

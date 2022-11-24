@@ -29,33 +29,41 @@ public class Game extends JFrame {
         p.setLayout(null);
 
         tf.setSize(new Dimension(150,20));
-        tf.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-        tf.setBackground(Color.BLACK);
-        tf.setForeground(Color.WHITE);
+        tf.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
+        tf.setBackground(Color.WHITE);
+        tf.setFont(new Font("Arial",Font.BOLD,12));
+        tf.setForeground(Color.BLACK);
         tf.setLocation(0,340);
         tf.setVisible(true);
 
-        mW = new JLabel("Missed words: "+missedWords);
+        mW = new JLabel("Missed Words: "+missedWords);
         mW.setSize(new Dimension(150,15));
         mW.setLocation(200,345);
-        mW.setForeground(Color.WHITE);
-        mW.setFont(new Font("Arial",Font.PLAIN,15));
+        mW.setForeground(new Color(136, 137, 138));
+        mW.setFont(new Font("Arial",Font.BOLD,15));
 
         WordPerMin = new JLabel("WordsPerMinute: " + wpm);
         WordPerMin.setSize(new Dimension(150,15));
         WordPerMin.setLocation(350,345);
-        WordPerMin.setForeground(Color.WHITE);
-        WordPerMin.setFont(new Font("Arial",Font.PLAIN,15));
+        WordPerMin.setForeground(new Color(0, 0, 0));
+        WordPerMin.setFont(new Font("Arial",Font.BOLD,15));
         wpm = 0;
 
+        JLabel csik = new JLabel("");
+        csik.setSize(new Dimension(600,20));
+        csik.setLocation(0,340);
+        csik.setBackground(Color.WHITE);
+        csik.setOpaque(true);
 
         Jatek();
 
-        p.setBackground(Color.BLACK);
+        p.setBackground(new Color(137, 207, 240));
+
 
         p.add(tf);
         p.add(mW);
         p.add(WordPerMin);
+        p.add(csik);
         f.add(p);
 
         f.setSize(600,400);
@@ -82,15 +90,14 @@ public class Game extends JFrame {
                 }
 
                 i+=1;
-                tf.addKeyListener(new KeyListener() {
 
+                tf.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
 
                     }
                     @Override
                     public void keyPressed(KeyEvent e) {
-
                     }
                     @Override
                     public void keyReleased(KeyEvent e) {
@@ -101,22 +108,24 @@ public class Game extends JFrame {
                     for (int j = 0; j < list.size(); j++) {
                         if(list.get(j).getLocation().x>590 && list.get(j).getLocation().x<599){
                             missedWords+=1;
-                            mW.setText("Missed words: " + missedWords);
+                            mW.setText("Missed Words: " + missedWords);
                         }
                     }
 
                 if(missedWords==5){
+
                     for (int k = 0; k < list.size(); k++) {
                         list.get(k).setFreeze();
                     }
+                    double s = ((double)i/10)/60.00;
+                    wpm = (double)(d/5)/ s;
 
-                    wpm = ((double)(d/5)/(double) ((i/10))/60);
-                    WordPerMin.setText("WordsPerMinute: " + (int) wpm);
+                    WordPerMin.setText("WordsPerMinute: " +(int) wpm);
                     tf.setEnabled(false);
                     t.cancel();
                     t.purge();
                 }
-                System.out.println(d);
+                System.out.println(i);
             }
         };
         t.scheduleAtFixedRate(task,0,100);
@@ -126,6 +135,7 @@ public class Game extends JFrame {
         for (int i = 0; i < list.size(); i++) {
             if(list.get(i).getText().equals(tf.getText())){
                 list.get(i).destroy();
+                d+=list.get(i).getText().length();
                 tf.setText("");
             }
         }
