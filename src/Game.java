@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.Timer;
@@ -8,11 +10,13 @@ import java.util.Timer;
 public class Game extends JFrame {
     private JFrame f = new JFrame();
     private JPanel p = new JPanel();
-    private JTextField tf;
-
+    private JTextField tfGame;
+    private JTextField tfEnd;
     private JLabel mW;
     private JLabel WordPerMin;
-    JLabel e;
+    private JLabel end;
+    private JLabel Username;
+    private JButton kuld;
     private Words szavak;
     private ArrayList<Word> list;
 
@@ -21,61 +25,13 @@ public class Game extends JFrame {
     int d = 0;
 
     public Game(String nyelv){
-
-        tf = new JTextField();
-        list = new ArrayList<>();
         szavak = new Words(nyelv);
         f.getContentPane();
-        p.setLayout(null);
 
-
-
-        tf.setSize(new Dimension(150,20));
-        tf.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
-        tf.setBackground(Color.WHITE);
-        tf.setFont(new Font("Arial",Font.BOLD,12));
-        tf.setForeground(Color.BLACK);
-        tf.setLocation(0,341);
-        tf.setVisible(true);
-
-        mW = new JLabel("Missed Words: "+missedWords);
-        mW.setSize(new Dimension(150,15));
-        mW.setLocation(200,345);
-        mW.setForeground(Color.BLACK);
-        mW.setFont(new Font("Arial",Font.BOLD,15));
-
-        WordPerMin = new JLabel("WordsPerMinute: " + wpm);
-        WordPerMin.setSize(new Dimension(150,15));
-        WordPerMin.setLocation(350,345);
-        WordPerMin.setForeground(new Color(0, 0, 0));
-        WordPerMin.setFont(new Font("Arial",Font.BOLD,15));
-        wpm = 0;
-
-        e = new JLabel("");
-        e.setVisible(false);
-        e.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
-        e.setSize(new Dimension(300,125));
-        e.setBackground(Color.WHITE);
-        e.setLocation(125,100);
-
-
-        JLabel csik = new JLabel("");
-        csik.setSize(new Dimension(600,20));
-        csik.setLocation(0,342);
-        csik.setBackground(Color.WHITE);
-        csik.setOpaque(true);
-
+        init();
         Jatek();
 
-        p.setBackground(new Color(137, 207, 240));
-
-        p.add(e);
-        p.add(tf);
-        p.add(mW);
-        p.add(WordPerMin);
-        p.add(csik);
         f.add(p);
-
         f.setSize(600,400);
         f.setVisible(true);
         f.setResizable(false);
@@ -84,9 +40,82 @@ public class Game extends JFrame {
 
     }
 
+    public void init(){
+
+        list = new ArrayList<>();
+
+
+        p.setLayout(null);
+
+        tfGame = new JTextField();
+        setTf(tfGame,0,341,150,20,new Font("Arial",Font.BOLD,12),Color.WHITE,Color.BLACK);
+        tfGame.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
+        tfGame.setVisible(true);
+
+        mW = new JLabel("Missed Words: "+missedWords);
+        setLabel(mW,200,345,150,15,new Font("Arial",Font.BOLD,15),Color.BLACK);
+
+        WordPerMin = new JLabel("WordsPerMinute: " + wpm);
+        setLabel(WordPerMin,350,345,150,15,new Font("Arial",Font.BOLD,15), Color.BLACK);
+        wpm = 0;
+
+        end = new JLabel("");
+        setLabel(end,125,100,300,125,null,Color.WHITE);
+        end.setVisible(false);
+        end.setBorder(BorderFactory.createLineBorder(new Color(136, 137, 138),2));
+
+        Username = new JLabel("Username: ");
+        setLabel(Username,150,150,60,30,new Font("Arial",Font.BOLD,10),Color.WHITE);
+        Username.setVisible(false);
+
+        tfEnd = new JTextField();
+        setTf(tfEnd,215,160,90,15,new Font("Arial",Font.PLAIN,12),Color.WHITE,Color.BLACK);
+        tfEnd.setVisible(false);
+
+        kuld = new JButton("Send");
+        kuld.setSize(new Dimension(75,25));
+        kuld.setFont(new Font("Arial",Font.BOLD,10));
+        kuld.setLocation(310,153);
+        kuld.setVisible(false);
+
+
+        JLabel csik = new JLabel("");
+        csik.setSize(new Dimension(600,20));
+        csik.setLocation(0,342);
+        csik.setBackground(Color.WHITE);
+        csik.setOpaque(true);
+
+        p.setBackground(new Color(137, 207, 240));
+
+        p.add(Username);
+        p.add(tfEnd);
+        p.add(kuld);
+        p.add(end);
+        p.add(tfGame);
+        p.add(mW);
+        p.add(WordPerMin);
+        p.add(csik);
+
+
+    }
+
+    public void setLabel(JLabel j,int x,int y,int w,int h,Font f,Color c){
+        j.setSize(new Dimension(w,h));
+        j.setLocation(x,y);
+        j.setFont(f);
+        j.setBackground(c);
+    }
+
+    public void setTf(JTextField j,int x,int y,int w,int h,Font f,Color c,Color c2){
+        j.setSize(new Dimension(w,h));
+        j.setLocation(x,y);
+        j.setFont(f);
+        j.setBackground(c);
+        j.setForeground(c2);
+    }
+
     public void Jatek(){
         Timer t = new Timer();
-
         TimerTask task = new TimerTask() {
             int i = 0;
             @Override
@@ -102,7 +131,7 @@ public class Game extends JFrame {
 
                 i+=1;
 
-                tf.addKeyListener(new KeyListener() {
+                tfGame.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
 
@@ -132,8 +161,8 @@ public class Game extends JFrame {
                     wpm = (double)(d/5)/ s;
 
                     WordPerMin.setText("WordsPerMinute: " +(int) wpm);
-                    tf.setEnabled(false);
-                    tf.setText("");
+                    tfGame.setEnabled(false);
+                    tfGame.setText("");
                     t.cancel();
                     t.purge();
                     System.out.println("xd1");
@@ -150,19 +179,39 @@ public class Game extends JFrame {
     }
 
     public void vege(){
+        end.setOpaque(true);
+        end.setVisible(true);
 
-        e.setOpaque(true);
-        e.setVisible(true);
-        System.out.println("xd3");
+        Username.setOpaque(true);
+        Username.setVisible(true);
+
+        tfEnd.setOpaque(true);
+        tfEnd.setVisible(true);
+
+        kuld.setOpaque(true);
+        kuld.setVisible(true);
+
+        kuld.addActionListener(e -> {
+            try {
+                FileWriter wr = new FileWriter("HoF.txt");
+                wr.write(tfEnd.getText() + " " + (int) wpm);
+                wr.close();
+                System.out.println("Sikeres fajlba iras nyomod bajnok");
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        });
 
     }
 
     public void check(){
         for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).getText().equals(tf.getText())){
+            if(list.get(i).getText().equals(tfGame.getText())){
                 list.get(i).destroy();
                 d+=list.get(i).getText().length();
-                tf.setText("");
+                tfGame.setText("");
             }
         }
     }
