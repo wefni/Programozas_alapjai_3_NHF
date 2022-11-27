@@ -17,16 +17,15 @@ public class Word extends JLabel{
                 try{
                     for (int i = 0; i < 600; i++) {
                         super.setLocation(i,y);
-                        Thread.sleep(10);
+                        Thread.sleep(25);
                         if(i>200 && i<400){
                             super.setForeground(new Color(240, 233, 50));
                         }
                         else if(i>400){
                             super.setForeground(new Color(161, 22, 22));
                         }
-
                         if(freeze){
-                            break;
+                           break;
                         }
                     }
                 }catch(Exception e){
