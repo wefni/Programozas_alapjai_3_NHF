@@ -1,20 +1,42 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *  MENU
+ */
 public class Menu{
+    /**
+     * Frame
+     */
     private JFrame f = new JFrame("TypeRacer");
+    /**
+     * Panel
+     */
     private JPanel p = new JPanel();
-
-    private ImageIcon ic = new ImageIcon("magyar.png");
+    /**
+     * Alapértelmezett zászló
+     */
+    private ImageIcon ic = new ImageIcon("kepek/magyar.png");
+    /**
+     * Alapértelmezett nehézségi szint
+     */
     private int diff = 25;
+    /**
+     * Alapértelmezett nyelv
+     */
     private String lan = "magyar";
 
+    /**
+     * Konstruktor
+     */
     public Menu() {
         initAll();
     }
 
+    /**
+     * Létrehozza a megjeleníteni kívánt elemeket
+     */
     private void initAll() {
-        ImageIcon img = new ImageIcon("kep.png");
         JButton btn;
         JMenuBar menuBar = new JMenuBar();
         JLabel lab = new JLabel("Diffculty: Easy");
@@ -46,25 +68,21 @@ public class Menu{
             lab.setText("Diffculty: Hard");
         });
 
-        /**
-         * Magyar
-         */
+
         item = new JMenuItem("Hungarian");
         lang.add(item);
         item.addActionListener(e -> {
             this.lan = "magyar";
-            ic = new ImageIcon("magyar.png");
+            ic = new ImageIcon("kepek/magyar.png");
             flag.setIcon(ic);
         });
 
-        /**
-         * Angol
-         */
+
         item = new JMenuItem("English");
         lang.add(item);
         item.addActionListener(e -> {
             this.lan = "angol";
-            ic = new ImageIcon("angol.png");
+            ic = new ImageIcon("kepek/angol.png");
             flag.setIcon(ic);
         });
 
@@ -72,7 +90,7 @@ public class Menu{
         lang.add(item);
         item.addActionListener(e -> {
             this.lan = "spanyol";
-            ic = new ImageIcon("spanyol.png");
+            ic = new ImageIcon("kepek/spanyol.png");
             flag.setIcon(ic);
         });
 
@@ -91,6 +109,7 @@ public class Menu{
             f.add(h);
         });
 
+
         flag.setSize(new Dimension(30,10));
 
         menuBar.add(diff);
@@ -100,7 +119,6 @@ public class Menu{
         f.add(this.p);
         f.setJMenuBar(menuBar);
         f.setSize(600, 500);
-        f.setIconImage(img.getImage());
         f.setVisible(true);
         f.setResizable(false);
         p.setBackground(Color.lightGray);
@@ -108,14 +126,39 @@ public class Menu{
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private JButton addButton(String name, JPanel p) {
+    /**
+     *  Egy gombhoz rendel stílust
+     * @param name - A gomb neve, amit látni szeretnénk
+     * @param p - A panel, ahol meg akarjuk jeleníteni
+     * @return - Egy designed gomb
+     */
+    public JButton addButton(String name, JPanel p) {
         JButton button = new JButton(name);
         button.setPreferredSize(new Dimension(150, 40));
         p.add(button,BorderLayout.PAGE_END);
         return button;
     }
 
+    /**
+     *  Panel
+     * @return - Panel
+     */
     public JPanel getP() {
         return p;
+    }
+
+    /**
+     * Visszaadja a nyelvet, amin játszani kíván a játékos
+     * @return nyelv
+     */
+    public String getLan() {
+        return lan;
+    }
+    /**
+     * Visszaadja a nehézséget, amin játszani kíván a játékos
+     * @return nehézség
+     */
+    public int getDiff(){
+        return diff;
     }
 }

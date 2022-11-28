@@ -9,24 +9,82 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.Timer;
 
+/**
+ *          Maga a játék
+ */
+
 public class Game extends JFrame {
+    /**
+     * Frame
+     */
     private JFrame f = new JFrame();
+    /**
+     * Panel
+     */
     private JPanel p = new JPanel();
+    /**
+     * A hely ahova be kell írni a szavakat
+     */
     private JTextField tfGame;
+    /**
+     * A hely ahova a végén be kell írni a felhasználó nevet
+     */
     private JTextField tfEnd;
+    /**
+     * Elhibázott szavak
+     */
     private JLabel mW;
+    /**
+     *  Word Per Minute
+     */
     private JLabel WordPerMin;
+    /**
+     * A szürke téglalap a játék végén
+     */
     private JLabel end;
+    /**
+     * Felhasználónév
+     */
     private JLabel Username;
+    /**
+     * A "Send" gomb
+     */
     private JButton kuld;
+    /**
+     * A beolvasott szavak
+     */
     private Words szavak;
+
+    /**
+     * A képernyőn lévő szavak listája
+     */
     private ArrayList<Word> list;
 
+    /**
+     * A kijelzőn lévő wpm szám
+     */
     private double wpm;
+
+    /**
+     * A kijelzőn lévő elhibázott szó szám
+     */
     private int missedWords = 0;
+
+    /**
+     *  Beírt karakterek száma a TextField-be a játék során
+     */
     int d = 0;
+
+    /**
+     * A játék nehézsége
+     */
     private int diff;
 
+    /**
+     *      Konstruktor
+     * @param nyelv - A játszani kívánt nyelv
+     * @param diff - A játszani kívánt nehézség
+     */
     public Game(String nyelv,int diff){
         szavak = new Words(nyelv);
         f.getContentPane();
@@ -38,16 +96,15 @@ public class Game extends JFrame {
         f.setSize(600,400);
         f.setVisible(true);
         f.setResizable(false);
-        f.setTitle("Nyomod");
+        f.setTitle("TypeRacer");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
+    /**
+     *  A képernyőn szereplő elemek elhelyezése
+     */
     public void init(){
-
         list = new ArrayList<>();
-
-
         p.setLayout(null);
 
         tfGame = new JTextField();
@@ -100,6 +157,16 @@ public class Game extends JFrame {
         p.add(csik);
     }
 
+    /**
+     *  Beállít egy Label-t az adott paraméterek szerint
+     * @param j - JLabel amit formázni szeretnénk
+     * @param x - X pozíció helye a képernyőn
+     * @param y - Y pozíció helye a képernyőn
+     * @param w - A szöveg szélessége
+     * @param h - A szöveg magassága
+     * @param f - Betűkmérete a szövegnek és a típusa
+     * @param c - A szó színe
+     */
     public void setLabel(JLabel j,int x,int y,int w,int h,Font f,Color c){
         j.setSize(new Dimension(w,h));
         j.setLocation(x,y);
@@ -107,6 +174,17 @@ public class Game extends JFrame {
         j.setBackground(c);
     }
 
+    /**
+     * Beállít egy TextField-et az adott paraméterek szerint
+     * @param j - JTextField amit formázni szeretnénk
+     * @param x - X pozíció helye a képernyőn
+     * @param y - Y pozíció helye a képernyőn
+     * @param w - A szöveg szélessége
+     * @param h - A szöveg magassága
+     * @param f - Betűkmérete a szövegnek és a típusa
+     * @param c - A háttér színe
+     * @param c2 - A szavak színe
+     */
     public void setTf(JTextField j,int x,int y,int w,int h,Font f,Color c,Color c2){
         j.setSize(new Dimension(w,h));
         j.setLocation(x,y);
@@ -115,6 +193,9 @@ public class Game extends JFrame {
         j.setForeground(c2);
     }
 
+    /**
+     *      Itt jönnek létre a szavak, illetve itt vizsgálja meg a függvény, hogy a beírt szó helyes-e, vagy elhagyta-e már a képernyőt
+     */
     public void Jatek(){
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
@@ -128,13 +209,10 @@ public class Game extends JFrame {
                     list.add(szo);
                     p.add(szo);
                 }
-
                 i+=1;
-
                 tfGame.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-
                     }
                     @Override
                     public void keyPressed(KeyEvent e) {
@@ -158,9 +236,8 @@ public class Game extends JFrame {
 
 
                 if(missedWords==5){
-
-                    for (int k = 0; k < list.size(); k++) {
-                        list.get(k).destroy();
+                    for (Word word : list) {
+                        word.destroy();
                     }
                     double s = ((double)i/10)/60.00;
                     wpm = (double)(d/5)/ s;
@@ -175,10 +252,11 @@ public class Game extends JFrame {
             }
         };
         t.scheduleAtFixedRate(task,0,100);
-
-
     }
 
+    /**
+     *  A játék végén be kell írni egy felhasználó nevet
+     */
     public void vege(){
         end.setOpaque(true);
         end.setVisible(true);
@@ -193,20 +271,26 @@ public class Game extends JFrame {
         kuld.setVisible(true);
 
         kuld.addActionListener(e -> {
-            try {
-                FileWriter wr = new FileWriter("HoF.txt",true);
-                BufferedWriter bw = new BufferedWriter(wr);
-                bw.write(tfEnd.getText() + " " + (int) wpm+"\n");
-                bw.close();
-                f.dispose();
-                Menu menu = new Menu();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if(!tfEnd.getText().equals("")){
+                try {
+                    FileWriter wr = new FileWriter("HoF.txt",true);
+                    BufferedWriter bw = new BufferedWriter(wr);
+                    bw.write(tfEnd.getText() + " " + (int) wpm+"\n");
+                    bw.close();
+                    f.dispose();
+                    Menu menu = new Menu();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
+
         });
 
     }
 
+    /**
+     *  Megnézi, hogy a TextField-be beírt szó rajta van-e a képernyőn
+     */
     public void check(){
         for (int i = 0; i < list.size(); i++) {
             if(list.get(i).getText().equals(tfGame.getText())){
@@ -217,8 +301,13 @@ public class Game extends JFrame {
         }
     }
 
+    /**
+     *  Visszaad egy random számot a két határ között
+     * @param min - Alső határ
+     * @param max - Felső határ
+     * @return - Visszaad egy random számot a két határ között
+     */
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-
 }

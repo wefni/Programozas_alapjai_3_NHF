@@ -5,12 +5,22 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
 
+/**
+ *      Dicsőségek csarnoka
+ */
 public class HoF extends JPanel {
-
+    /**
+     * Konstruktor
+     * @param m - Menu példány
+     */
     public HoF(Menu m) {
         hof(m);
     }
 
+    /**
+     *  Visszalépés miatt kell egy Menu példány
+     * @param m - Menu példány
+     */
     public void hof(Menu m) {
 
         JTable j;
@@ -33,13 +43,17 @@ public class HoF extends JPanel {
         });
     }
 
+    /**
+     *  Listát alakít át egy 2D-s tömbbé, amit előbb rendez csökkenő sorrendben
+     * @return - 2D tömb
+     */
     public String[][] read() {
-        List<Best> word = new ArrayList<>();
+        List<Player> word = new ArrayList<>();
         try {
-            File myObj = new File("HoF.txt");
+            File myObj = new File("txt/HoF.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
-                word.add(new Best(myReader.nextLine()));
+                word.add(new Player(myReader.nextLine()));
             }
             myReader.close();
         } catch (FileNotFoundException e) {
