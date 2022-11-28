@@ -4,8 +4,10 @@ import java.awt.*;
 public class Word extends JLabel{
         private Thread t;
         private boolean freeze;
-        public Word(String word){
+        private int diff;
+        public Word(String word,int diff){
             freeze = false;
+            this.diff = diff;
             super.setText(word);
             super.setSize(new Dimension(150,50));
             super.setForeground(new Color(35, 110, 25));
@@ -17,7 +19,7 @@ public class Word extends JLabel{
                 try{
                     for (int i = 0; i < 600; i++) {
                         super.setLocation(i,y);
-                        Thread.sleep(25);
+                        Thread.sleep(this.diff);
                         if(i>200 && i<400){
                             super.setForeground(new Color(240, 233, 50));
                         }
@@ -25,7 +27,7 @@ public class Word extends JLabel{
                             super.setForeground(new Color(161, 22, 22));
                         }
                         if(freeze){
-                           break;
+                            t.interrupt();
                         }
                     }
                 }catch(Exception e){

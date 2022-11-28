@@ -27,6 +27,5 @@ public class Words{
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        System.out.println("Sikeres!");
     }
 }

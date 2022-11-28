@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,11 +25,12 @@ public class Game extends JFrame {
     private double wpm;
     private int missedWords = 0;
     int d = 0;
+    private int diff;
 
-    public Game(String nyelv){
+    public Game(String nyelv,int diff){
         szavak = new Words(nyelv);
         f.getContentPane();
-
+        this.diff = diff;
         init();
         Jatek();
 
@@ -95,8 +98,6 @@ public class Game extends JFrame {
         p.add(mW);
         p.add(WordPerMin);
         p.add(csik);
-
-
     }
 
     public void setLabel(JLabel j,int x,int y,int w,int h,Font f,Color c){
@@ -120,10 +121,9 @@ public class Game extends JFrame {
             int i = 0;
             @Override
             public void run() {
-                Word szo = new Word("asd");
+                Word szo;
                 if(i%10==0){
-
-                    szo = new Word(szavak.getWords().get(getRandomNumber(1,szavak.getWords().size())));
+                    szo = new Word(szavak.getWords().get(getRandomNumber(1,szavak.getWords().size())),diff);
                     szo.go();
                     list.add(szo);
                     p.add(szo);
@@ -146,11 +146,16 @@ public class Game extends JFrame {
                 });
 
                     for (int j = 0; j < list.size(); j++) {
-                        if(list.get(j).getLocation().x>590 && list.get(j).getLocation().x<599){
+                        System.out.println(list.get(j).getLocation().x%100);
+                        if(list.get(j).getLocation().x%100>85 && list.get(j).getLocation().x/100==5){
+                            list.get(j).setLocation(100,100);
+                            list.get(j).destroy();
                             missedWords+=1;
                             mW.setText("Missed Words: " + missedWords);
+                            list.remove(j);
                         }
                     }
+
 
                 if(missedWords==5){
 
@@ -165,14 +170,10 @@ public class Game extends JFrame {
                     tfGame.setText("");
                     t.cancel();
                     t.purge();
-                    System.out.println("xd1");
                     vege();
                 }
-                System.out.println(i);
-
             }
         };
-        System.out.println("xd2");
         t.scheduleAtFixedRate(task,0,100);
 
 
@@ -193,9 +194,10 @@ public class Game extends JFrame {
 
         kuld.addActionListener(e -> {
             try {
-                FileWriter wr = new FileWriter("HoF.txt");
-                wr.write(tfEnd.getText() + " " + (int) wpm);
-                wr.close();
+                FileWriter wr = new FileWriter("HoF.txt",true);
+                BufferedWriter bw = new BufferedWriter(wr);
+                bw.write(tfEnd.getText() + " " + (int) wpm+"\n");
+                bw.close();
                 f.dispose();
                 Menu menu = new Menu();
             } catch (IOException ex) {
